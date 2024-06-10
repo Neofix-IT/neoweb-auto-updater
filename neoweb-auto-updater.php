@@ -43,3 +43,4 @@ define('NEOWEB_UPDATER_ADMINPANEL_VISIBLE', false);
 
 
 require_once 'scheduler.php';
+require_once 'logger.php';
