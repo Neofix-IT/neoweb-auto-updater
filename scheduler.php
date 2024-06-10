@@ -11,17 +11,17 @@ function neoweb_schedule_auto_update($event) {
     switch ($event->hook) {
             case 'wp_version_check':
                 $event->schedule = "daily";
-                $desired_time = new DateTime(NEOWEB_UPDATE_ENABLE_START_TIME, new DateTimeZone(NEOWEB_UPDATE_TZ));
+                $desired_time = new DateTime(NEOWEB_PLANNED_UPDATE_TIMEPOINT, new DateTimeZone(NEOWEB_UPDATE_TZ));
                 if ($desired_time->getTimestamp() < time()) $desired_time->modify('+1 day');
                 $event->timestamp = $desired_time->getTimestamp();
             case 'wp_update_plugins':
                 $event->schedule = "daily";
-                $desired_time = new DateTime(NEOWEB_UPDATE_ENABLE_START_TIME, new DateTimeZone(NEOWEB_UPDATE_TZ));
+                $desired_time = new DateTime(NEOWEB_PLANNED_UPDATE_TIMEPOINT, new DateTimeZone(NEOWEB_UPDATE_TZ));
                 if ($desired_time->getTimestamp() < time()) $desired_time->modify('+1 day');
                 $event->timestamp = $desired_time->getTimestamp();
             case 'wp_update_themes':
                 $event->schedule = "daily";
-                $desired_time = new DateTime(NEOWEB_UPDATE_ENABLE_START_TIME, new DateTimeZone(NEOWEB_UPDATE_TZ));
+                $desired_time = new DateTime(NEOWEB_PLANNED_UPDATE_TIMEPOINT, new DateTimeZone(NEOWEB_UPDATE_TZ));
                 if ($desired_time->getTimestamp() < time()) $desired_time->modify('+1 day');
                 $event->timestamp = $desired_time->getTimestamp();
                     
