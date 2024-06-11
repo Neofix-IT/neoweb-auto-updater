@@ -75,7 +75,7 @@ if( defined( 'NEOWEB_UPDATER_ADMINPANEL_VISIBLE' ) && NEOWEB_UPDATER_ADMINPANEL_
 			$upgrader = new WP_Automatic_Updater;
 			$upgrader->run();
 		} catch (Exception $e) {
-			return "Update gescheitert";	
+			return "Update gescheitert";
 		}
 		return "Update gestartet";
 	}
