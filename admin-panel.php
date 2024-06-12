@@ -18,11 +18,11 @@ if( defined( 'NEOWEB_UPDATER_ADMINPANEL_VISIBLE' ) && NEOWEB_UPDATER_ADMINPANEL_
 	
 		add_menu_page(
 			'Neoweb AutoUpdater',
-			'Neoweb AutoUpdater',
+			'AutoUpdater',
 			'update_core',
 			'auto-updater', // hook/slug of page
 			'neoweb_auto_updater_render', // function to render page
-			'dashicons-welcome-widgets-menus',
+			'dashicons-update',
 			30,
 		);
 	}
