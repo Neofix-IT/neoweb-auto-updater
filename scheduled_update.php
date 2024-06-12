@@ -56,6 +56,23 @@ class NeowebUpdateScheduler{
         // add_filter( 'auto_update_core', 'neoweb_auto_update_schedule', 10, 2 );
     }
 
+    function run_updates(){
+        neoweb_log("Start neoweb auto-update");
+
+        // Force auto-update enabled using "automatic_updater_disabled" filter
+        global $neoweb_enable_update_override;
+        $neoweb_enable_update_override = true;
+        neoweb_log('set global override');
+
+        try{
+            // request-update.php
+            include_once( ABSPATH . '/wp-includes/update.php' );
+			wp_maybe_auto_update();
+        } finally {
+            neoweb_log('reset global override');
+            $neoweb_enable_update_override = false;
+        }
+    }
 }
 
 $neoWebUpdater = new NeowebUpdateScheduler;
