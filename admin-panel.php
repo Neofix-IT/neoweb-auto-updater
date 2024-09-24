@@ -27,20 +27,88 @@ if( defined( 'NEOWEB_UPDATER_ADMINPANEL_VISIBLE' ) && NEOWEB_UPDATER_ADMINPANEL_
 		);
 	}
 	add_action( 'admin_menu', 'neoweb_updater_adminpanel' );
-	 
-	
-	function neoweb_auto_updater_render() {
+
+	function neoweb_auto_updater_render(){
 		?>
-		<div style="display: block; box-sizing: border-box; margin: 20px 20px 20px 0;">
-			<a id="start-test" style="display: block; cursor: pointer; padding: 10px 30px; background-color: green; color: white;">Update starten</a>
-			<p id="output"></p>
+		<div id="neoweb-updater">
+			<div class="controlpanel">
+				<a class="button start-update">
+					Update starten
+				</a>
+				<a class="button clear-log">
+					Logs Löschen
+				</a>
+				<a class="button update-log">
+					Logs neu laden
+				</a>
+				<p class="start-update result"></p>
+			</div>
+			<div class="log content">
+				<p>
+				<?php
+					$log_file = WP_CONTENT_DIR . "/neoweb_autoupdater.log";
+					if( file_exists($log_file) ){
+						echo nl2br( esc_html( file_get_contents($log_file) ) );
+						echo '<p>Log Ende</p>';
+					} else {
+						echo 'Logfile nicht gefunden';
+					}
+				?>
+				</p>
+			</div>
 		</div>
+
+		<style>
+			#neoweb-updater div{
+				display: block;
+				box-sizing: border-box;
+			}
+			#neoweb-updater{
+				margin: 20px 20px 20px 0;
+			}
+			#neoweb-updater .controlpanel{
+				margin-bottom: 10px;
+			}
+			#neoweb-updater .button{
+				padding: 5px 20px;
+				background-color: #164aa0;
+				color: white;
+				border-radius: 2px;
+				margin-right: 10px;
+			}
+			.log{
+				background-color: lightgrey;
+				padding: 10px;
+				width: 100%;
+			}
+		</style>
 		<script>
-			document.querySelector("#start-test").addEventListener("click", function (e){
-				const apiUrl = '<?php echo get_rest_url() . 'neoweb/v1/run-update'; ?>';
-				const outputElement = document.getElementById('output');
+			document.querySelector(".button.clear-log").addEventListener("click", function (e){
+				const apiUrl = '<?php echo get_rest_url() . 'neoweb/v1/clear-log'; ?>';
+				const logContainer = document.querySelector('.log.content p');
+				const requestHeaders = {"X-WP-Nonce": "<?php echo wp_create_nonce( 'wp_rest' ); ?>"};
 	
-				fetch(apiUrl)
+				fetch(apiUrl, {headers: requestHeaders,})
+				.then(response => {
+					if (!response.ok) {
+					return "Fehler bei der Abfrage";
+					}
+					return response.json();
+				})
+				.then(data => {
+					// Display data in an HTML element
+					logContainer.textContent = JSON.stringify(data, null, 2);
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
+			});
+			document.querySelector(".button.start-update").addEventListener("click", function (e){
+				const apiUrl = '<?php echo get_rest_url() . 'neoweb/v1/run-update'; ?>';
+				const outputElement = document.querySelector('.start-update.result');
+				const requestHeaders = {"X-WP-Nonce": "<?php echo wp_create_nonce( 'wp_rest' ); ?>"};
+	
+				fetch(apiUrl, {headers: requestHeaders,})
 				.then(response => {
 					if (!response.ok) {
 					return "Fehler bei der Abfrage";
@@ -55,30 +123,61 @@ if( defined( 'NEOWEB_UPDATER_ADMINPANEL_VISIBLE' ) && NEOWEB_UPDATER_ADMINPANEL_
 					console.error('Error:', error);
 				});
 			});
+			document.querySelector(".button.update-log").addEventListener("click", function (e){
+				location.reload();
+			});
 		</script>
 		<?php
 	}
-	
 	
 	add_action( 'rest_api_init', function () {
 		register_rest_route( 'neoweb/v1', '/run-update', array(
 		  'methods' => 'GET',
 		  'callback' => 'neoweb_run_update',
+		  'permission_callback' => 'has_updater_permission',
 		) );
 	  } );
 	
 	function neoweb_run_update(){
+		require_once 'logger.php';
+
+		global $neoweb_enable_update_override;
+		neoweb_log("Start auto-update via Adminpanel");
 		try{
-			include_once( ABSPATH . '/wp-admin/includes/admin.php' );
-			include_once( ABSPATH . '/wp-admin/includes/class-wp-upgrader.php' );
-		
-			$upgrader = new WP_Automatic_Updater;
-			$upgrader->run();
+			$neoweb_enable_update_override = true;
+			include_once( ABSPATH . '/wp-includes/update.php' );
+			wp_maybe_auto_update();
 		} catch (Exception $e) {
 			return "Update gescheitert";
 		}
+		neoweb_log('resetting update override for manual update using adminpanel');
+		$neoweb_enable_update_override = false;
 		return "Update gestartet";
 	}
-}
 
+	add_action( 'rest_api_init', function () {
+		register_rest_route( 'neoweb/v1', '/clear-log', array(
+		  'methods' => 'GET',
+		  'callback' => 'neoweb_clear_log',
+		  'permission_callback' => 'has_updater_permission',
+		) );
+	  } );
+	
+	function neoweb_clear_log(){
+		try{
+			$log_file = WP_CONTENT_DIR . "/neoweb_autoupdater.log";
+			if (unlink($log_file)){
+				return "Logs gelöscht";
+			}
+		} catch (Exception $e) {}
+
+		return 'Unerwarteter Fehler beim Löschen der Logs';
+	}
+
+	function has_updater_permission(){
+        return current_user_can('update_core');
+		return current_user_can('update_plugins');
+		return current_user_can('update_themes');
+    }
+}
 ?>
