@@ -8,13 +8,24 @@ class NeowebUpdateScheduler{
 
     // Scheduled time of the update (Using WP-timezone)
     const SCHEDULED_TIME = "02:00";
-
+    
     function __construct(){
         get_option('timezone_string');
         $this->set_autoupdate_preferences();
 
         $this->init_cron();
 
+        // Force auto-update schedule
+        add_filter( 'automatic_updater_disabled', array( $this, "conditional_force_enable_update" ), 10, 1 );
+
+        // Disable Wordpress health Auto-updater check
+        add_filter('site_status_tests', array( $this, 'ignore_auto_update_check' ), 10, 1);
+
+        add_action('automatic_updates_complete', array( $this, 'neoweb_log_updates' ), 10, 1 );
+
+        // Remove cron event after plugin is deactivated
+        register_deactivation_hook( NEOWEB_UPDATER_PLUGINFILE_PATH ,  array( $this, 'disable_cron') );
+    }
 
     // Schedule Cron job in order to update at specified point of time
     function init_cron(){
@@ -72,6 +83,53 @@ class NeowebUpdateScheduler{
             neoweb_log('reset global override');
             $neoweb_enable_update_override = false;
         }
+    }
+
+    function neoweb_log_updates($update_results) {
+        neoweb_log('Updates completed');
+        
+        if( isset($update_results['plugin']) ){
+            $plugins_info = 'Updated Plugin(s):';
+            foreach ( $update_results['plugin'] as $plugin ) {
+                $plugins_info .= ' "' . $plugin->name . ' ' . $plugin->item->new_version . '"';
+            }
+            neoweb_log($plugins_info);
+        }
+
+        if( isset($update_results['theme']) ){
+            $themes_info = 'Updated Theme(s):';
+            foreach ( $update_results['theme'] as $theme ) {
+                $themes_info .= ' "' . $theme->name . ' ' . $theme->item->new_version . '"';
+            }
+            neoweb_log($themes_info);
+        }
+
+        if( isset($update_results['core']) ){
+            $core_info = 'Updated WP Core Version(s):';
+            foreach ( $update_results['core'] as $core ) {
+                $core_info .= ' "' . $core->name . '"';
+            }
+            neoweb_log($core_info);
+        }
+    }
+
+    function conditional_force_enable_update($disabled){
+        global $neoweb_enable_update_override;
+
+        if( $neoweb_enable_update_override ){
+            neoweb_log('Updater disabled check: Updates enabled');
+        } else {
+            neoweb_log('Updater disabled check: Update disabled');
+        }
+
+        // If override is enabled, then set auto-updater disabled=false
+        // Important: Inverted logic here :)
+        return !$neoweb_enable_update_override;
+    }
+
+    function ignore_auto_update_check($tests){
+        unset( $tests['async']['background_updates'] );
+        return $tests;
     }
 }
 
