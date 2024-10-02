@@ -63,9 +63,11 @@ if( defined( 'NEOWEB_UPDATER_ADMINPANEL_VISIBLE' ) && NEOWEB_UPDATER_ADMINPANEL_
 			}
 			#neoweb-updater{
 				margin: 20px 20px 20px 0;
+				height: calc(100vh - var(--wp-admin--admin-bar--height) - 155px);
 			}
 			#neoweb-updater .controlpanel{
 				margin-bottom: 10px;
+				min-height: 75px;
 			}
 			#neoweb-updater .button{
 				padding: 5px 20px;
@@ -74,10 +76,12 @@ if( defined( 'NEOWEB_UPDATER_ADMINPANEL_VISIBLE' ) && NEOWEB_UPDATER_ADMINPANEL_
 				border-radius: 2px;
 				margin-right: 10px;
 			}
-			.log{
+			.log.content{
 				background-color: lightgrey;
 				padding: 10px;
 				width: 100%;
+				max-height: 100%;
+				overflow-y: scroll;
 			}
 		</style>
 		<script>
