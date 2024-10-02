@@ -3,7 +3,7 @@
  * Plugin Name: Neoweb AutoUpdater
  * Plugin URI: https://neoweb.ch/
  * Description: Auto-updater for WP-core, translations, Pugins and Themes
- * Version: 1.0.0
+ * Version: 1.0.1
  * Requires at least: 6.0
  * Required PHP: 7.5
  * Author: Neoweb
