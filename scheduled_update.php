@@ -68,32 +68,36 @@ class NeowebUpdateScheduler{
     }
 
     function run_updates(){
-        neoweb_log("Start neoweb auto-update");
+		global $logger;
+
+        $logger->log("Start neoweb auto-update");
 
         // Force auto-update enabled using "automatic_updater_disabled" filter
         global $neoweb_enable_update_override;
         $neoweb_enable_update_override = true;
-        neoweb_log('set global override');
+        $logger->log('set global override');
 
         try{
             // request-update.php
             include_once( ABSPATH . '/wp-includes/update.php' );
 			wp_maybe_auto_update();
         } finally {
-            neoweb_log('reset global override');
+            $logger->log('reset global override');
             $neoweb_enable_update_override = false;
         }
     }
 
     function neoweb_log_updates($update_results) {
-        neoweb_log('Updates completed');
+        global $logger;
+        
+        $logger->log('Updates completed');
         
         if( isset($update_results['plugin']) ){
             $plugins_info = 'Updated Plugin(s):';
             foreach ( $update_results['plugin'] as $plugin ) {
                 $plugins_info .= ' "' . $plugin->name . ' ' . $plugin->item->new_version . '"';
             }
-            neoweb_log($plugins_info);
+            $logger->log($plugins_info);
         }
 
         if( isset($update_results['theme']) ){
@@ -101,7 +105,7 @@ class NeowebUpdateScheduler{
             foreach ( $update_results['theme'] as $theme ) {
                 $themes_info .= ' "' . $theme->name . ' ' . $theme->item->new_version . '"';
             }
-            neoweb_log($themes_info);
+            $logger->log($themes_info);
         }
 
         if( isset($update_results['core']) ){
@@ -109,17 +113,18 @@ class NeowebUpdateScheduler{
             foreach ( $update_results['core'] as $core ) {
                 $core_info .= ' "' . $core->name . '"';
             }
-            neoweb_log($core_info);
+            $logger->log($core_info);
         }
     }
 
     function conditional_force_enable_update($disabled){
         global $neoweb_enable_update_override;
+        global $logger;
 
         if( $neoweb_enable_update_override ){
-            neoweb_log('Updater disabled check: Updates enabled');
+            $logger->log('Updater disabled check: Updates enabled');
         } else {
-            neoweb_log('Updater disabled check: Update disabled');
+            $logger->log('Updater disabled check: Update disabled');
         }
 
         // If override is enabled, then set auto-updater disabled=false

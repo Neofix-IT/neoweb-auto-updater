@@ -137,10 +137,12 @@ if( defined( 'NEOWEB_UPDATER_ADMINPANEL_VISIBLE' ) && NEOWEB_UPDATER_ADMINPANEL_
 	  } );
 	
 	function neoweb_run_update(){
-		require_once 'logger.php';
-
 		global $neoweb_enable_update_override;
-		neoweb_log("Start auto-update via Adminpanel");
+
+		require_once 'logger.php';
+		global $logger;
+		
+		$logger->log("Start auto-update via Adminpanel");
 		try{
 			$neoweb_enable_update_override = true;
 			include_once( ABSPATH . '/wp-includes/update.php' );
@@ -148,7 +150,7 @@ if( defined( 'NEOWEB_UPDATER_ADMINPANEL_VISIBLE' ) && NEOWEB_UPDATER_ADMINPANEL_
 		} catch (Exception $e) {
 			return "Update gescheitert";
 		}
-		neoweb_log('resetting update override for manual update using adminpanel');
+		$logger->log('resetting update override for manual update using adminpanel');
 		$neoweb_enable_update_override = false;
 		return "Update gestartet";
 	}
