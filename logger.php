@@ -38,7 +38,7 @@ class NeowebLoger{
         }
     }
 
-    private function deactivate_actions(){
+    function deactivate_actions(){
         // delete logfile
         $log_file = WP_CONTENT_DIR . "/neoweb_autoupdater.log";
         if ( file_exists($log_file)){
