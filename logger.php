@@ -11,7 +11,7 @@
  * 
 */ 
 
-class NeowebLoger{
+class NeowebLogger{
     function __construct(){
         register_deactivation_hook( NEOWEB_UPDATER_PLUGINFILE_PATH ,  array($this, "deactivate_actions") );
     }
@@ -81,5 +81,5 @@ class NeowebLoger{
     }
 }
 
-$logger = new NeowebLoger();
+$logger = new NeowebLogger();
 ?>
