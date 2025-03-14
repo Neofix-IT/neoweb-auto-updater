@@ -14,12 +14,12 @@
 */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
+if (! defined('ABSPATH')) {
 	exit;
 }
 
-define( 'NEOWEB_UPDATER_PATH', plugin_dir_path( __FILE__ ) );
-define( 'NEOWEB_UPDATER_PLUGINFILE_PATH', __FILE__ );
+define('NEOWEB_UPDATER_PATH', plugin_dir_path(__FILE__));
+define('NEOWEB_UPDATER_PLUGINFILE_PATH', __FILE__);
 
 // Enable Test-update admin panel menu page
 define('NEOWEB_UPDATER_ADMINPANEL_VISIBLE', true);
@@ -27,5 +27,3 @@ define('NEOWEB_LOG_LENGTH', 150);
 
 require_once 'scheduled_update.php';
 require_once 'admin-panel.php';
-
-?>
