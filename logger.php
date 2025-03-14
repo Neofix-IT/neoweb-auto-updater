@@ -9,11 +9,12 @@
  * @author: Neocode
  * @version 1.0.0
  * 
-*/ 
+*/
 
-class NeowebLogger{
-    function __construct(){
-        register_deactivation_hook( NEOWEB_UPDATER_PLUGINFILE_PATH ,  array($this, "deactivate_actions") );
+if (! defined('ABSPATH')) {
+    exit;
+}
+
     }
 
     public function log($message){
