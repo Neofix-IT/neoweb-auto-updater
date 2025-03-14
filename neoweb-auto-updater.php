@@ -25,5 +25,6 @@ define('NEOWEB_UPDATER_PLUGINFILE_PATH', __FILE__);
 define('NEOWEB_UPDATER_ADMINPANEL_VISIBLE', true);
 define('NEOWEB_LOG_LENGTH', 150);
 
+require_once 'logger.php';
 require_once 'scheduled_update.php';
 require_once 'admin-panel.php';

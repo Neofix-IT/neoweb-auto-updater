@@ -57,7 +57,6 @@ class NeowebAdminPanel
 	{
 		global $neoweb_enable_update_override;
 
-		require_once 'logger.php';
 		global $logger;
 
 		$logger->log("Start auto-update via Adminpanel");
