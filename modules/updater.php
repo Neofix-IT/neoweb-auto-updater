@@ -102,6 +102,16 @@ class NeowebUpdater
 
     function update()
     {
+        delete_site_transient('update_plugins'); // Clear cached plugin update data
+        wp_update_plugins(); // Trigger a fresh plugin update check
+
+        delete_site_transient('update_themes'); // Clear cached theme update data
+        wp_update_themes(); // Trigger a fresh theme update check
+
+        delete_site_transient('update_core'); // Clear cached core update data
+        wp_version_check(); // Trigger a fresh core update check
+
+
         $this->logger->log("Start neoweb auto-update");
 
         // Force auto-update enabled using "automatic_updater_disabled" filter
