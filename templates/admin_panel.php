@@ -120,5 +120,3 @@ if (! defined('ABSPATH')) {
         location.reload();
     });
 </script>
-
-?>
