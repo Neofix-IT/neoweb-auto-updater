@@ -85,7 +85,7 @@ class NeowebAdminPanel
 		return 'Unerwarteter Fehler beim Löschen der Logs';
 	}
 
-	function has_update_permission()
+	function has_updater_permission()
 	{
 		$core = current_user_can('update_core');
 		$plugins = current_user_can('update_plugins');
@@ -93,9 +93,4 @@ class NeowebAdminPanel
 
 		return $core && $plugins && $themes;
 	}
-}
-
-
-if (defined('NEOWEB_UPDATER_ADMINPANEL_VISIBLE') && NEOWEB_UPDATER_ADMINPANEL_VISIBLE) {
-	new NeowebAdminPanel();
 }
