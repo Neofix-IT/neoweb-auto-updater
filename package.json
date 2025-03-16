@@ -4,12 +4,13 @@
   "description": "Auto updater &amp; update scheduler for Wordpress",
   "main": "index.js",
   "scripts": {
-    "build": "gulp zip"
+    "build": "gulp build"
   },
   "devDependencies": {
+    "del": "^8.0.0",
+    "fs": "^0.0.1-security",
     "gulp": "^5.0.0",
-    "gulp-zip": "^6.1.0",
-    "path": "^0.12.7"
+    "gulp-zip": "^6.1.0"
   },
   "type": "module"
 }
