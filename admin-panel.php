@@ -14,8 +14,14 @@ if (! defined('ABSPATH')) {
 
 class NeowebAdminPanel
 {
-	function __construct()
+	private $updater;
+	private $logger;
+
+	function __construct($updater, $logger)
 	{
+		$this->updater = $updater;
+		$this->logger = $logger;
+
 		add_action('admin_menu', array($this, "add_admin_panel_page"));
 		add_action('rest_api_init', array($this, "init_admin_rest_endpoints"));
 	}
