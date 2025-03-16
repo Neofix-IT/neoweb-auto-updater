@@ -89,5 +89,3 @@ class NeowebLogger
         return $output;
     }
 }
-
-$logger = new NeowebLogger();
