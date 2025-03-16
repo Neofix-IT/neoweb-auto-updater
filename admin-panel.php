@@ -61,21 +61,18 @@ class NeowebAdminPanel
 
 	function run_update()
 	{
-		global $neoweb_enable_update_override;
-
-		global $logger;
-
-		$logger->log("Start auto-update via Adminpanel");
 		try {
-			$neoweb_enable_update_override = true;
-			include_once(ABSPATH . '/wp-includes/update.php');
-			wp_maybe_auto_update();
+			$this->logger->log("Starte Updates via Adminpanel.");
+
+			$this->updater->update();
+
+			$this->logger->log("Updates via Adminpanel erfolgreich beendet");
+			return "Updates erfolgreich durchgeführt";
 		} catch (Exception $e) {
-			return "Update gescheitert";
+			$this->logger->log("Fehler beim Update via Adminpanel: " . $e->getMessage());
 		}
-		$logger->log('resetting update override for manual update using adminpanel');
-		$neoweb_enable_update_override = false;
-		return "Update gestartet";
+
+		return 'Unerwarteter Fehler bei den Updates';
 	}
 
 	function clear_log()
