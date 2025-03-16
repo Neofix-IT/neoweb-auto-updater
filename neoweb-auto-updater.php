@@ -25,10 +25,10 @@ define('NEOWEB_UPDATER_PLUGINFILE_PATH', __FILE__);
 define('NEOWEB_LOG_LENGTH', 150);
 
 require_once NEOWEB_UPDATER_PATH . 'modules/logger.php';
-require_once NEOWEB_UPDATER_PATH . 'scheduled_update.php';
+require_once NEOWEB_UPDATER_PATH . 'modules/scheduled_update.php';
 require_once NEOWEB_UPDATER_PATH . 'modules/updater.php';
 require_once NEOWEB_UPDATER_PATH . 'modules/github-updater.php';
-require_once NEOWEB_UPDATER_PATH . 'admin-panel.php';
+require_once NEOWEB_UPDATER_PATH . 'modules/admin-panel.php';
 
 
 class NeowebAutoUpdater
