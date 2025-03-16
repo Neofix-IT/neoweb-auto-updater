@@ -83,6 +83,7 @@ class NeowebAdminPanel
 				return "Logs gelöscht";
 			}
 		} catch (Exception $e) {
+			$this->logger->log("Fehler beim Löschen der Logdatei via Adminpanel: " . $e->getMessage());
 		}
 
 		return 'Unerwarteter Fehler beim Löschen der Logs';
