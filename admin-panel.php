@@ -49,13 +49,13 @@ class NeowebAdminPanel
 		register_rest_route('neoweb/v1', '/run-update', array(
 			'methods' => 'GET',
 			'callback' => array($this, "run_update"),
-			'permission_callback' => 'has_updater_permission',
+			'permission_callback' => array($this, "has_updater_permission"),
 		));
 
 		register_rest_route('neoweb/v1', '/clear-log', array(
 			'methods' => 'GET',
 			'callback' => array($this, "clear_log"),
-			'permission_callback' => 'has_updater_permission',
+			'permission_callback' => array($this, "has_updater_permission"),
 		));
 	}
 
