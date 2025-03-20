@@ -4,7 +4,7 @@
  * Plugin URI: https://neoweb.ch/
  * Update URI: https://github.com/Neofix-IT/neoweb-auto-updater
  * Description: Auto-updater for WP-core, translations, Pugins and Themes
- * Version: 1.0.1
+ * Version: 1.1.0
  * Requires at least: 6.0
  * Required PHP: 8.0
  * Author: Neoweb
