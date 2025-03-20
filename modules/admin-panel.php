@@ -64,7 +64,15 @@ class NeowebAdminPanel
 		try {
 			$this->logger->log("Starte Updates via Adminpanel.");
 
+			// Simulate cron for manual update, since plugin won't be enabled otherwhise.
+			// This is only required for manual updates, because automatic updates are executed using WP-cron
+			add_filter('wp_doing_cron', '__return_true');
+
+			// Run the updates
 			$this->updater->update();
+
+			// Unset cron override
+			remove_filter('wp_doing_cron', '__return_true');
 
 			$this->logger->log("Updates via Adminpanel erfolgreich beendet");
 			return "Updates erfolgreich durchgeführt";
